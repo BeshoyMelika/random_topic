@@ -295,6 +295,7 @@ class _HeroTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Image.asset('assets/icon/logo.png', width: 64, height: 64),
           Text(
             'Off the\nCuff',
             style: GoogleFonts.fredoka(
