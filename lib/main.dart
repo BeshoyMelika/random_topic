@@ -540,7 +540,7 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  static const int _fullSeconds = 3;
+  static const int _fullSeconds = 30;
   static const String _startSoundPath =
       'sounds/alexis_gaming_cam-timer-terminer-342934.mp3';
 
