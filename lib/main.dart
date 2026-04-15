@@ -205,9 +205,10 @@ class _TopicSpinnerScreenState extends State<TopicSpinnerScreen> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 960;
+            final isPhone = constraints.maxWidth < 600;
 
             return Padding(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(isPhone ? 12 : 24),
               child: compact
                   ? Column(
                       children: [
@@ -280,50 +281,56 @@ class _HeroTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const ink = Color(0xFF134E4A);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isPhone = constraints.maxWidth < 520;
+        final titleSize = isPhone ? 60.0 : 100.0;
+        final stepsSize = isPhone ? 22.0 : 33.0;
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0x00FFFFFF), Color(0x66E8DFC8)],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Image.asset('assets/icon/logo.png', width: 64, height: 64),
-          Text(
-            'Off the\nCuff',
-            style: GoogleFonts.fredoka(
-              fontSize: 100,
-              height: 0.9,
-              color: ink,
-              fontWeight: FontWeight.w700,
-              shadows: const [
-                Shadow(
-                  color: Color(0x5594B3AD),
-                  offset: Offset(0, 8),
-                  blurRadius: 0,
+        return Container(
+          padding: EdgeInsets.all(isPhone ? 12 : 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0x00FFFFFF), Color(0x66E8DFC8)],
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Off the\nCuff',
+                style: GoogleFonts.fredoka(
+                  fontSize: titleSize,
+                  height: 0.9,
+                  color: ink,
+                  fontWeight: FontWeight.w700,
+                  shadows: const [
+                    Shadow(
+                      color: Color(0x5594B3AD),
+                      offset: Offset(0, 8),
+                      blurRadius: 0,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: isPhone ? 20 : 40),
+              Text(
+                '1) Spin to get a random topic\n2) Start a 30-second timer\n3) Speak and record your answer',
+                style: GoogleFonts.baloo2(
+                  fontSize: stepsSize,
+                  color: const Color(0xFF2A6660),
+                  height: 1.2,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 40),
-          Text(
-            '1) Spin to get a random topic\n2) Start a 30-second timer\n3) Speak and record your answer',
-            style: GoogleFonts.baloo2(
-              fontSize: 33,
-              color: const Color(0xFF2A6660),
-              height: 1.2,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -355,178 +362,214 @@ class _TopicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const wheelItemExtent = 80.0;
-    const wheelVisibleItems = 4;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isPhone = constraints.maxWidth < 560;
+        final isTiny = constraints.maxWidth < 420;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x33253937),
-            offset: Offset(0, 16),
-            blurRadius: 36,
+        final wheelItemExtent = isTiny ? 64.0 : (isPhone ? 72.0 : 80.0);
+        const wheelVisibleItems = 4;
+        final headingSize = isTiny ? 25.0 : (isPhone ? 29.0 : 34.0);
+        final topicFontSize = isTiny ? 16.0 : (isPhone ? 19.0 : 22.0);
+        final buttonFontSize = isTiny ? 23.0 : (isPhone ? 26.0 : 33.0);
+        final secondaryButtonFontSize = isTiny ? 22.0 : (isPhone ? 24.0 : 32.0);
+        final horizontalMargin = isTiny ? 10.0 : (isPhone ? 18.0 : 36.0);
+        final topPadding = isTiny ? 68.0 : (isPhone ? 80.0 : 92.0);
+        final sidePadding = isTiny ? 12.0 : (isPhone ? 18.0 : 34.0);
+        final arrowSize = isTiny ? 32.0 : 40.0;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(32),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x33253937),
+                offset: Offset(0, 16),
+                blurRadius: 36,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(34, 92, 34, 34),
-            child: Column(
-              children: [
-                const SizedBox(height: 12),
-                Text(
-                  'هتتكلم عن إيه؟',
-                  style: GoogleFonts.fredoka(
-                    fontSize: 34,
-                    color: const Color(0xFF5D7F79),
-                    fontWeight: FontWeight.w500,
-                  ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  sidePadding,
+                  topPadding,
+                  sidePadding,
+                  20,
                 ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: Center(
-                    child: SizedBox(
-                      height: wheelItemExtent * wheelVisibleItems,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 36),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(28),
-                              border: Border.all(
-                                color: const Color(0xFFBBD1CA),
-                                width: 2,
-                              ),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Color(0x66FFFFFF), Color(0x22FFFFFF)],
-                              ),
-                            ),
-                            child: ListWheelScrollView.useDelegate(
-                              controller: wheelController,
-                              itemExtent: wheelItemExtent,
-                              diameterRatio: 1.5,
-                              perspective: 0.0025,
-                              physics: isSpinning
-                                  ? const NeverScrollableScrollPhysics()
-                                  : const FixedExtentScrollPhysics(),
-                              overAndUnderCenterOpacity: 0.45,
-                              useMagnifier: true,
-                              magnification: 1.08,
-                              onSelectedItemChanged: onWheelChanged,
-                              childDelegate: ListWheelChildBuilderDelegate(
-                                childCount: topics.length * 200,
-                                builder: (context, index) {
-                                  final topic = topics[index % topics.length];
-                                  return Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                      ),
-                                      child: Text(
-                                        topic,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.cairo(
-                                          fontSize: 22,
-                                          height: 1.2,
-                                          color: inkColor,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          IgnorePointer(
-                            child: Container(
-                              height: wheelItemExtent,
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 30,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: inkColor, width: 2.3),
-                                color: const Color(0x1A134E4A),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 8,
-                            child: Icon(
-                              Icons.play_arrow_rounded,
-                              color: inkColor,
-                              size: 40,
-                            ),
-                          ),
-                          Positioned(
-                            right: 8,
-                            child: Transform.flip(
-                              flipX: true,
-                              child: Icon(
-                                Icons.play_arrow_rounded,
-                                color: inkColor,
-                                size: 40,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                   children: [
-                    FilledButton(
-                      onPressed: isSpinning ? null : onSpin,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: inkColor,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22),
-                        ),
-                        minimumSize: const Size(160, 64),
-                        textStyle: GoogleFonts.fredoka(
-                          fontSize: 33,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    SizedBox(height: isPhone ? 4 : 12),
+                    Text(
+                      'هتتكلم عن إيه؟',
+                      style: GoogleFonts.fredoka(
+                        fontSize: headingSize,
+                        color: const Color(0xFF5D7F79),
+                        fontWeight: FontWeight.w500,
                       ),
-                      child: Text(isSpinning ? 'Spinning...' : 'Spin!'),
                     ),
-                    const SizedBox(width: 18),
-                    OutlinedButton(
-                      onPressed: onStartTimer,
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: inkColor,
-                        side: BorderSide(color: inkColor, width: 2),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22),
-                        ),
-                        minimumSize: const Size(220, 64),
-                        textStyle: GoogleFonts.fredoka(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
+                    SizedBox(height: isPhone ? 6 : 8),
+                    Expanded(
+                      child: Center(
+                        child: SizedBox(
+                          height: wheelItemExtent * wheelVisibleItems,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: horizontalMargin,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(28),
+                                  border: Border.all(
+                                    color: const Color(0xFFBBD1CA),
+                                    width: 2,
+                                  ),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Color(0x66FFFFFF),
+                                      Color(0x22FFFFFF),
+                                    ],
+                                  ),
+                                ),
+                                child: ListWheelScrollView.useDelegate(
+                                  controller: wheelController,
+                                  itemExtent: wheelItemExtent,
+                                  diameterRatio: 1.5,
+                                  perspective: 0.0025,
+                                  physics: isSpinning
+                                      ? const NeverScrollableScrollPhysics()
+                                      : const NeverScrollableScrollPhysics(),
+                                  overAndUnderCenterOpacity: 0.45,
+                                  useMagnifier: true,
+                                  magnification: 1.08,
+                                  onSelectedItemChanged: onWheelChanged,
+                                  childDelegate: ListWheelChildBuilderDelegate(
+                                    childCount: topics.length * 200,
+                                    builder: (context, index) {
+                                      final topic =
+                                          topics[index % topics.length];
+                                      return Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: isTiny ? 10 : 20,
+                                          ),
+                                          child: Text(
+                                            topic,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.cairo(
+                                              fontSize: topicFontSize,
+                                              height: 1.2,
+                                              color: inkColor,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              IgnorePointer(
+                                child: Container(
+                                  height: wheelItemExtent,
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: isTiny ? 8 : 30,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: inkColor,
+                                      width: 2.3,
+                                    ),
+                                    color: const Color(0x1A134E4A),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 8,
+                                child: Icon(
+                                  Icons.play_arrow_rounded,
+                                  color: inkColor,
+                                  size: arrowSize,
+                                ),
+                              ),
+                              Positioned(
+                                right: 8,
+                                child: Transform.flip(
+                                  flipX: true,
+                                  child: Icon(
+                                    Icons.play_arrow_rounded,
+                                    color: inkColor,
+                                    size: arrowSize,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      child: const Text('Start Timer ->'),
+                    ),
+                    SizedBox(height: isPhone ? 18 : 30),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        FilledButton(
+                          onPressed: isSpinning ? null : onSpin,
+                          style: FilledButton.styleFrom(
+                            backgroundColor: inkColor,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22),
+                            ),
+                            minimumSize: Size(
+                              isPhone ? 130 : 160,
+                              isPhone ? 54 : 64,
+                            ),
+                            textStyle: GoogleFonts.fredoka(
+                              fontSize: buttonFontSize,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          child: Text(isSpinning ? 'Spinning...' : 'Spin!'),
+                        ),
+                        OutlinedButton(
+                          onPressed: onStartTimer,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: inkColor,
+                            side: BorderSide(color: inkColor, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22),
+                            ),
+                            minimumSize: Size(
+                              isPhone ? 190 : 220,
+                              isPhone ? 54 : 64,
+                            ),
+                            textStyle: GoogleFonts.fredoka(
+                              fontSize: secondaryButtonFontSize,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          child: const Text('Start Timer ->'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -670,6 +713,9 @@ class _TimerScreenState extends State<TimerScreen> {
   Widget build(BuildContext context) {
     const ink = Color(0xFF134E4A);
     final progress = (_fullSeconds - _secondsLeft) / _fullSeconds;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final isPhone = screenWidth < 560;
+    final appBarTitle = isPhone ? 24.0 : 34.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -677,118 +723,131 @@ class _TimerScreenState extends State<TimerScreen> {
         title: Text(
           '30-Second Timer',
           style: GoogleFonts.fredoka(
-            fontSize: 34,
+            fontSize: appBarTitle,
             color: ink,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 700),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Container(
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9F7F0),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x33253937),
-                    offset: Offset(0, 14),
-                    blurRadius: 34,
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'الموضوع اللي هتتكلم عنه',
-                    style: GoogleFonts.cairo(
-                      fontSize: 29,
-                      color: const Color(0xFF547572),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.topic,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.cairo(
-                      fontSize: 37,
-                      color: ink,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: 210,
-                    height: 210,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '$_secondsLeft',
-                          style: GoogleFonts.fredoka(
-                            fontSize: 72,
-                            color: ink,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        CircularProgressIndicator(
-                          value: progress,
-                          strokeWidth: 14,
-                          backgroundColor: const Color(0xFFCAD8D2),
-                          color: ink,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 26),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FilledButton(
-                        onPressed: _secondsLeft == 0 ? _reset : _startPause,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: ink,
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size(160, 58),
-                          textStyle: GoogleFonts.fredoka(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        child: Text(
-                          _secondsLeft == 0
-                              ? 'Again'
-                              : (_running ? 'Pause' : 'Start'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      OutlinedButton(
-                        onPressed: _newTopic,
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: ink,
-                          side: const BorderSide(color: ink, width: 2),
-                          minimumSize: const Size(160, 58),
-                          textStyle: GoogleFonts.fredoka(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        child: const Text('New Topic'),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isPhone = constraints.maxWidth < 560;
+          final timerTextSize = isPhone ? 56.0 : 72.0;
+          final topicTitleSize = isPhone ? 24.0 : 29.0;
+          final topicTextSize = isPhone ? 29.0 : 37.0;
+          final buttonTextSize = isPhone ? 24.0 : 30.0;
+          final cardPadding = isPhone ? 18.0 : 28.0;
+          final ringSize = isPhone ? 170.0 : 210.0;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 700),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(isPhone ? 12 : 24),
+                child: Container(
+                  padding: EdgeInsets.all(cardPadding),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF9F7F0),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x33253937),
+                        offset: Offset(0, 14),
+                        blurRadius: 34,
                       ),
                     ],
                   ),
-                ],
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'الموضوع اللي هتتكلم عنه',
+                        style: GoogleFonts.cairo(
+                          fontSize: topicTitleSize,
+                          color: const Color(0xFF547572),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.topic,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.cairo(
+                          fontSize: topicTextSize,
+                          color: ink,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      SizedBox(height: isPhone ? 18 : 24),
+                      SizedBox(
+                        width: ringSize,
+                        height: ringSize,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$_secondsLeft',
+                              style: GoogleFonts.fredoka(
+                                fontSize: timerTextSize,
+                                color: ink,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(width: isPhone ? 12 : 20),
+                            CircularProgressIndicator(
+                              value: progress,
+                              strokeWidth: isPhone ? 11 : 14,
+                              backgroundColor: const Color(0xFFCAD8D2),
+                              color: ink,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: isPhone ? 18 : 26),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          FilledButton(
+                            onPressed: _secondsLeft == 0 ? _reset : _startPause,
+                            style: FilledButton.styleFrom(
+                              backgroundColor: ink,
+                              foregroundColor: Colors.white,
+                              minimumSize: Size(isPhone ? 130 : 160, 58),
+                              textStyle: GoogleFonts.fredoka(
+                                fontSize: buttonTextSize,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            child: Text(
+                              _secondsLeft == 0
+                                  ? 'Again'
+                                  : (_running ? 'Pause' : 'Start'),
+                            ),
+                          ),
+                          OutlinedButton(
+                            onPressed: _newTopic,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: ink,
+                              side: const BorderSide(color: ink, width: 2),
+                              minimumSize: Size(isPhone ? 150 : 160, 58),
+                              textStyle: GoogleFonts.fredoka(
+                                fontSize: buttonTextSize,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            child: const Text('New Topic'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
